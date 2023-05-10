@@ -1,0 +1,2 @@
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v150\Microsoft.CppBuild.targets(391,5): warning MSB8028: The intermediate directory (x64\Release\) contains files shared from another project (ConsoleApplication2.vcxproj, Vorpal C++ Example.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  Vorpal.vcxproj -> C:\Users\P\Documents\GitHub\VorpalLibraryCPP-Public\x64\Release\Vorpal C++ Example.exe

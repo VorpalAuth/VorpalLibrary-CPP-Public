@@ -1,0 +1,106 @@
+#pragma once
+#include <stdint.h>
+#include <string>
+#include <optional>
+#include <functional>
+
+#define VORPAL_API   extern "C" __declspec( dllimport )
+
+//Configuration
+#define VORPAL_DEFAULT_STR_CHAR_COUNT 64
+
+//DO NOT TOUCH
+#define VORPAL_API_VERSION 1
+
+#define VORPAL_MAX_PROCS 16
+#define VORPAL_PROC_MAX_ARGS 10
+#define VORPAL_PROC_STR_MAX_CHAR_COUNT 25
+
+#define VORPAL_MAX_LICENSEKEYS 256
+
+#define VORPAL_HWID_MAX_CHAR_COUNT 256
+#define VORPAL_APPID_MAX_CHAR_COUNT 64
+#define VORPAL_APPLICATION_NAME_MAX_CHAR_COUNT 64
+#define VORPAL_LICENSE_STR_MAX_CHAR_COUNT 64
+
+
+
+//Forward declarations
+struct VorpalClient;
+
+
+//Status/Error enum
+enum class VORPAL_STATUS : uint32_t {
+	NONE = 0x00,
+
+	//Good statuses, proceed no problems
+	MIN_GOOD = 0xA00,
+	OK = 0xA01,
+	DONE = 0xA02,
+	MAX_GOOD = 0xAFF,
+
+	//Neutral
+	MIN_NEUTRAL = 0xB00,
+	WAITING = 0xB01,
+	BUSY = 0xB02,
+	MAX_NEUTRAL = 0xBFF,
+
+	//Errors
+	MIN_ERROR = 0xF00,
+	NOT_ENOUGH_MEMORY = 0xF01, //Allocate more memory for us please
+	FULL = 0xF02,
+	TIMED_OUT= 0xF03,
+	BAD_DATA = 0xF04,
+	API_MISMATCH = 0xF05,
+	MAX_ERROR = 0xFFF,
+
+	STATUS_MAX = 0xF0F,
+};
+
+//Structs used when dealing with VorpalProcedures
+extern "C" union ProcArg {
+	int arg_i;
+	uint64_t arg_ull;
+	float arg_f;
+	char arg_s[VORPAL_PROC_STR_MAX_CHAR_COUNT];
+};
+
+extern "C" struct ProcArgs {
+	ProcArg args[VORPAL_PROC_MAX_ARGS] = {};
+};
+
+extern "C" struct Proc {
+	uint32_t proc{};
+	ProcArgs args{};
+
+	VORPAL_STATUS status = VORPAL_STATUS::NONE;
+};
+
+//Structs used when dealing with ReadOnly fields and ProtectedData
+extern "C" struct ReadOnlyData {
+	uintptr_t data;
+	size_t size;
+
+	VORPAL_STATUS status;
+	size_t wantedSize;
+};
+
+///Vorpal Library imports
+VORPAL_API VORPAL_STATUS Vorpal_Register(VorpalClient* info, char* valorid, int apiVersion);
+VORPAL_API void Vorpal_Unregister(VorpalClient* info);
+
+
+//Utility macros
+#define initReadOnly(ro, type)ro.data = (uintptr_t) new type;\
+ro.size = sizeof(type);
+
+#define initReadOnlyProtected(ro, type)ro.data = (uintptr_t) new type;\
+ro.size = sizeof(type);\
+this->CloseProtected(ro);
+
+//Not portable/C++ only
+struct ProcExtraData {
+	std::function<void(uintptr_t, uintptr_t)> callback;
+	uintptr_t vorpal;
+	uintptr_t protected_struct; size_t protected_struct_size;
+};
