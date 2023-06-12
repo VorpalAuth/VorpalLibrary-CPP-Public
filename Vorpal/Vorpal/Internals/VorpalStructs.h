@@ -2,7 +2,7 @@
 #include "VorpalInternals.h"
 
 //Structs used by the Vorpal Client
-extern "C" struct Protected_Application {
+VORPAL_EXTERN struct Protected_Application {
 	//ReadOnlyData Error;
 	ReadOnlyData/*bool*/ Result;
 	//uint64_t Time;
@@ -20,7 +20,7 @@ extern "C" struct Protected_Application {
 	ReadOnlyData/*bool*/ AntiVM;
 };
 
-extern "C" struct Protected_LoginApplication {
+VORPAL_EXTERN struct Protected_LoginApplication {
 	//ReadOnlyData Error;
 	ReadOnlyData/*bool*/ Result;
 	//uint64_t Time;
@@ -35,7 +35,7 @@ extern "C" struct Protected_LoginApplication {
 	//uint64_t Expiry;
 };
 
-extern "C" struct LicenseKey {
+VORPAL_EXTERN struct LicenseKey {
 	char AppId[VORPAL_APPID_MAX_CHAR_COUNT];
 	char ApplicationName[VORPAL_APPLICATION_NAME_MAX_CHAR_COUNT];
 	char License[VORPAL_LICENSE_STR_MAX_CHAR_COUNT];
@@ -45,7 +45,7 @@ extern "C" struct LicenseKey {
 	char HWID[VORPAL_HWID_MAX_CHAR_COUNT];
 };
 
-extern "C" struct Protected_Login {
+VORPAL_EXTERN struct Protected_Login {
 	ReadOnlyData/*std::string*/  HashedID;
 	ReadOnlyData/*std::string*/  Username;
 	ReadOnlyData/*std::string*/  Email;
@@ -58,7 +58,7 @@ extern "C" struct Protected_Login {
 
 
 //New
-extern "C" struct VorpalClient { //Vorpalclient represents the data that the client has, this data is linked to their Vorpal (classPtr) instance
+VORPAL_EXTERN struct VorpalClient { //Vorpalclient represents the data that the client has, this data is linked to their Vorpal (classPtr) instance
 	uint64_t inst;
 
 	Protected_Application app; size_t app_size;

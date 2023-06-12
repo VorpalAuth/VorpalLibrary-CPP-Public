@@ -5,6 +5,7 @@
 #include <functional>
 
 #define VORPAL_API   extern "C" __declspec( dllimport )
+#define VORPAL_EXTERN extern "C"
 
 //Configuration
 #define VORPAL_DEFAULT_STR_CHAR_COUNT 64
@@ -58,18 +59,18 @@ enum class VORPAL_STATUS : uint32_t {
 };
 
 //Structs used when dealing with VorpalProcedures
-extern "C" union ProcArg {
+VORPAL_EXTERN union ProcArg {
 	int arg_i;
 	uint64_t arg_ull;
 	float arg_f;
 	char arg_s[VORPAL_PROC_STR_MAX_CHAR_COUNT];
 };
 
-extern "C" struct ProcArgs {
+VORPAL_EXTERN struct ProcArgs {
 	ProcArg args[VORPAL_PROC_MAX_ARGS] = {};
 };
 
-extern "C" struct Proc {
+VORPAL_EXTERN struct Proc {
 	uint32_t proc{};
 	ProcArgs args{};
 
@@ -77,7 +78,7 @@ extern "C" struct Proc {
 };
 
 //Structs used when dealing with ReadOnly fields and ProtectedData
-extern "C" struct ReadOnlyData {
+VORPAL_EXTERN struct ReadOnlyData {
 	uintptr_t data;
 	size_t size;
 

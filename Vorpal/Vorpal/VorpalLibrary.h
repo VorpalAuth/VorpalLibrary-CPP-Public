@@ -3,7 +3,6 @@
 #include <queue>
 #include <chrono>
 
-
 struct Vorpal {
 private:
 	VorpalClient client; //Vorpal client interface, you don't have to touch this
@@ -129,9 +128,6 @@ public:
 		this->InvokeProc(0x21051ccaU, theargs);
 	}
 
-
-
-
 	Vorpal(std::string brandId) {
 		this->initStatus = Vorpal_Register(&client, (char*)brandId.c_str(), VORPAL_API_VERSION);
 
@@ -180,8 +176,6 @@ public:
 		initReadOnlyProtected(client.login.Status, char[VORPAL_DEFAULT_STR_CHAR_COUNT]);
 		initReadOnlyProtected(client.login.Rank, char[VORPAL_DEFAULT_STR_CHAR_COUNT]);
 
-
-
 		this->CloseProtected(reinterpret_cast<uintptr_t>(&client.app), sizeof(Protected_Application));
 	}
 
@@ -193,18 +187,18 @@ public:
 
 		if (ro->status != VORPAL_STATUS::OK) {
 			switch (ro->status) {
-			case VORPAL_STATUS::NOT_ENOUGH_MEMORY: { //Our string is too small, always handle this properly just in case.
-				//Allocate more memory
-				free((void*)ro->data);
-				ro->data = (uintptr_t)malloc(ro->wantedSize);
+				case VORPAL_STATUS::NOT_ENOUGH_MEMORY: { //Our string is too small, always handle this properly just in case.
+					//Allocate more memory
+					free((void*)ro->data);
+					ro->data = (uintptr_t)malloc(ro->wantedSize);
 
-				//Update size
-				ro->size = ro->wantedSize;
+					//Update size
+					ro->size = ro->wantedSize;
 
-				//You should try again
-				return std::nullopt;
-				break;
-			}
+					//You should try again
+					return std::nullopt;
+					break;
+				}
 			}
 		}
 
@@ -225,7 +219,6 @@ public:
 			auto procData = front.first;
 			auto procExtra = front.second;
 
-
 			if (front.first->status == VORPAL_STATUS::DONE) {
 				if (procExtra.protected_struct != 0) { //0 means not needed and not inside a protected struct
 					this->OpenProtected(procExtra.protected_struct, procExtra.protected_struct_size);
@@ -242,7 +235,6 @@ public:
 					this->CloseProtected(procExtra.protected_struct, procExtra.protected_struct_size);
 				}
 			}
-
 		}
 	}
 
@@ -270,7 +262,6 @@ public:
 
 		//Should never reach here...
 		return VORPAL_STATUS::NONE;
-
 	}
 
 	VORPAL_STATUS InvokeProc(std::uint32_t proc, ProcArgs args) {

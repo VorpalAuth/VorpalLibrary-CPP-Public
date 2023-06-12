@@ -1,12 +1,11 @@
 #include <iostream>
 #include <Windows.h>
 #include "Vorpal/VorpalLibrary.h"
-inline constexpr char joaat_tolower(char c)
-{
+inline constexpr char joaat_tolower(char c) {
     return c >= 'A' && c <= 'Z' ? c | 1 << 5 : c;
 }
-inline constexpr uint32_t joaat(const std::string_view str)
-{
+
+inline constexpr uint32_t joaat(const std::string_view str) {
     uint32_t hash = 0;
     for (auto c : str)
     {
@@ -19,19 +18,16 @@ inline constexpr uint32_t joaat(const std::string_view str)
     hash += (hash << 15);
     return hash;
 }
-int main()
-{
+
+int main() {
     //Initialize vorpal
     Vorpal v("Your valor id here");
-
-
 
     //Check for initialization status
     if (v.GetInitializationStatus() != VORPAL_STATUS::OK) {
         std::cout << "[-] Error when initializing vorpal: " << std::hex << (int)v.GetLastStatus() << "\n";
     }
 
-    
     //Grab a file from the vorpal api, given that we are logged in
     //All vorpal APIs use callbacks and are asynchronous
     v.GetFile("Test", "test2", [](uintptr_t vorpal_address, uintptr_t fileData_address){
@@ -71,7 +67,6 @@ int main()
             if (vorpal->GetLastStatus() == VORPAL_STATUS::NOT_ENOUGH_MEMORY) { 
                 std::cout << "[?] Error identified as NOT_ENOUGH_MEMORY, we have allocated more memory for you, please try again...\n";
             }
-
         }
     });
 
@@ -124,7 +119,6 @@ int main()
         //Don't forget to close
         vorpal->CloseProtected(login->Username);
 
-
         //License Keys don't need open/close as they are not protected
         if (login->KeyAmount < VORPAL_MAX_LICENSEKEYS) {
             for (int i = 0; i < login->KeyAmount; ++i) {
@@ -134,9 +128,7 @@ int main()
         else {
             std::cout << "[-] This error shouldn't happen ever.\n";
         }
-
-
-        });
+    });
 
     v.LoginApplication("appId", [](uintptr_t vorpal_address, uintptr_t loginApp_address) {
         auto vorpal = reinterpret_cast<Vorpal*>(vorpal_address);
@@ -182,7 +174,7 @@ int main()
 
         //Don't forget to close
         vorpal->CloseProtected(loginApp->Result);
-     });
+    });
 
     v.RedeemLicense("4444-4444-4444", [](uintptr_t vorpal_address, uintptr_t loginApp_address) {
         auto vorpal = reinterpret_cast<Vorpal*>(vorpal_address);
@@ -205,7 +197,7 @@ int main()
 
         //Don't forget to close
         vorpal->CloseProtected(loginApp->Result);
-        });
+    });
 
     while (true) {
         v.Tick(); //Make sure to tick this somewhere
