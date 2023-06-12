@@ -1,11 +1,30 @@
 #include <iostream>
 #include <Windows.h>
 #include "Vorpal/VorpalLibrary.h"
-
+inline constexpr char joaat_tolower(char c)
+{
+    return c >= 'A' && c <= 'Z' ? c | 1 << 5 : c;
+}
+inline constexpr uint32_t joaat(const std::string_view str)
+{
+    uint32_t hash = 0;
+    for (auto c : str)
+    {
+        hash += joaat_tolower(c);
+        hash += (hash << 10);
+        hash ^= (hash >> 6);
+    }
+    hash += (hash << 3);
+    hash ^= (hash >> 11);
+    hash += (hash << 15);
+    return hash;
+}
 int main()
 {
     //Initialize vorpal
     Vorpal v("Your valor id here");
+
+
 
     //Check for initialization status
     if (v.GetInitializationStatus() != VORPAL_STATUS::OK) {
@@ -121,7 +140,7 @@ int main()
 
     v.LoginApplication("appId", [](uintptr_t vorpal_address, uintptr_t loginApp_address) {
         auto vorpal = reinterpret_cast<Vorpal*>(vorpal_address);
-        auto loginApp = reinterpret_cast<Protected_Login*>(loginApp_address);
+        auto loginApp = reinterpret_cast<Protected_LoginApplication*>(loginApp_address);
 
         //Before using protected fields, we have to open them.
         vorpal->OpenProtected(loginApp->Username);
@@ -141,6 +160,52 @@ int main()
         //Don't forget to close
         vorpal->CloseProtected(loginApp->Username);
     });
+
+    v.Register("Peter2", "hunter3", "peter@example.com", [](uintptr_t vorpal_address, uintptr_t loginApp_address) {
+        auto vorpal = reinterpret_cast<Vorpal*>(vorpal_address);
+        auto loginApp = reinterpret_cast<Protected_LoginApplication*>(loginApp_address);
+
+        //Before using protected fields, we have to open them.
+        vorpal->OpenProtected(loginApp->Result);
+
+        auto result = vorpal->GetReadOnly<bool>(&loginApp->Result);
+        if (result.has_value()) {
+            std::cout << "Register Status: " << result.value()  << "\n";
+        }
+        else {
+            std::cout << "[-] Error fetching register status: " << std::hex << "0x" << (uint32_t)vorpal->GetLastStatus() << "\n";
+
+            if (vorpal->GetLastStatus() == VORPAL_STATUS::NOT_ENOUGH_MEMORY) {
+                std::cout << "[?] Error identified as NOT_ENOUGH_MEMORY, we have allocated more memory for you, please try again...\n";
+            }
+        }
+
+        //Don't forget to close
+        vorpal->CloseProtected(loginApp->Result);
+     });
+
+    v.RedeemLicense("4444-4444-4444", [](uintptr_t vorpal_address, uintptr_t loginApp_address) {
+        auto vorpal = reinterpret_cast<Vorpal*>(vorpal_address);
+        auto loginApp = reinterpret_cast<Protected_LoginApplication*>(loginApp_address);
+
+        //Before using protected fields, we have to open them.
+        vorpal->OpenProtected(loginApp->Result);
+
+        auto result = vorpal->GetReadOnly<bool>(&loginApp->Result);
+        if (result.has_value()) {
+            std::cout << "License Redeem Status: " << result.value() << "\n";
+        }
+        else {
+            std::cout << "[-] Error fetching license redeem status: " << std::hex << "0x" << (uint32_t)vorpal->GetLastStatus() << "\n";
+
+            if (vorpal->GetLastStatus() == VORPAL_STATUS::NOT_ENOUGH_MEMORY) {
+                std::cout << "[?] Error identified as NOT_ENOUGH_MEMORY, we have allocated more memory for you, please try again...\n";
+            }
+        }
+
+        //Don't forget to close
+        vorpal->CloseProtected(loginApp->Result);
+        });
 
     while (true) {
         v.Tick(); //Make sure to tick this somewhere

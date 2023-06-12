@@ -3,8 +3,8 @@
 
 //Structs used by the Vorpal Client
 extern "C" struct Protected_Application {
-	//std::string Error;
-	//ReadOnlyVar<bool> Result;
+	//ReadOnlyData Error;
+	ReadOnlyData/*bool*/ Result;
 	//uint64_t Time;
 
 	ReadOnlyData/*string*/ Name;
@@ -21,8 +21,8 @@ extern "C" struct Protected_Application {
 };
 
 extern "C" struct Protected_LoginApplication {
-	//ReadOnlyVar<std::string> Error;
-	//ReadOnlyVar<bool> Result;
+	//ReadOnlyData Error;
+	ReadOnlyData/*bool*/ Result;
 	//uint64_t Time;
 
 	ReadOnlyData/*std::string*/ HashedID;

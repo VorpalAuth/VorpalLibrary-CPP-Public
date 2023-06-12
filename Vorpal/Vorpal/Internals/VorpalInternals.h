@@ -10,7 +10,7 @@
 #define VORPAL_DEFAULT_STR_CHAR_COUNT 64
 
 //DO NOT TOUCH
-#define VORPAL_API_VERSION 1
+#define VORPAL_API_VERSION 2
 
 #define VORPAL_MAX_PROCS 16
 #define VORPAL_PROC_MAX_ARGS 10
@@ -43,18 +43,18 @@ enum class VORPAL_STATUS : uint32_t {
 	MIN_NEUTRAL = 0xB00,
 	WAITING = 0xB01,
 	BUSY = 0xB02,
+
 	MAX_NEUTRAL = 0xBFF,
 
 	//Errors
 	MIN_ERROR = 0xF00,
 	NOT_ENOUGH_MEMORY = 0xF01, //Allocate more memory for us please
-	FULL = 0xF02,
-	TIMED_OUT= 0xF03,
-	BAD_DATA = 0xF04,
-	API_MISMATCH = 0xF05,
+	NOT_INITIALIZED = 0xF02, //You probably forgot to initialize/allocate something
+	FULL = 0xF03,
+	TIMED_OUT= 0xF04,
+	BAD_DATA = 0xF05,
+	API_MISMATCH = 0xF06,
 	MAX_ERROR = 0xFFF,
-
-	STATUS_MAX = 0xF0F,
 };
 
 //Structs used when dealing with VorpalProcedures

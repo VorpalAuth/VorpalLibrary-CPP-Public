@@ -18,7 +18,7 @@ public:
 	}
 
 	VORPAL_STATUS GetLastStatus() {
-		return this->initStatus;
+		return this->lastStatus;
 	}
 
 	void GetApplication(std::string appId, std::function<void(uintptr_t /*Vorpal**/, uintptr_t /*Protected_Application*/)> fn) {
@@ -45,6 +45,26 @@ public:
 
 		ProcArgs theargs = { {} };
 		memcpy_s(theargs.args[0].arg_s, 25, appId.c_str(), appId.size() + 1);
+
+		this->InvokeProcAsync(procId, theargs, fn, reinterpret_cast<uintptr_t>(&this->client.loginApp), this->client.loginApp_size);
+	}
+
+	void Register(std::string username, std::string password, std::string email, std::function<void(uintptr_t /*Vorpal**/, uintptr_t  /*Protected_LoginApplication**/)> fn) {
+		constexpr uint32_t procId = 0x839c6e6e;
+
+		ProcArgs theargs = { {} };
+		memcpy_s(theargs.args[0].arg_s, 25, username.c_str(), username.size() + 1);
+		memcpy_s(theargs.args[1].arg_s, 25, password.c_str(), password.size() + 1);
+		memcpy_s(theargs.args[2].arg_s, 25, email.c_str(), email.size() + 1);
+
+		this->InvokeProcAsync(procId, theargs, fn, reinterpret_cast<uintptr_t>(&this->client.loginApp), this->client.loginApp_size);
+	}
+
+	void RedeemLicense(std::string license, std::function<void(uintptr_t /*Vorpal**/, uintptr_t  /*Protected_LoginApplication**/)> fn) {
+		constexpr uint32_t procId = 0xb3431b91;
+
+		ProcArgs theargs = { {} };
+		memcpy_s(theargs.args[0].arg_s, 25, license.c_str(), license.size() + 1);
 
 		this->InvokeProcAsync(procId, theargs, fn, reinterpret_cast<uintptr_t>(&this->client.loginApp), this->client.loginApp_size);
 	}
@@ -137,6 +157,7 @@ public:
 		initReadOnlyProtected(client.app.Developer, bool);
 		initReadOnlyProtected(client.app.AntiDebug, bool);
 		initReadOnlyProtected(client.app.AntiVM, bool);
+		//initReadOnlyProtected(client.app.Result, bool);
 
 		//LoginApplication
 		client.loginApp_size = sizeof(Protected_LoginApplication);
@@ -149,6 +170,7 @@ public:
 		initReadOnlyProtected(client.loginApp.Key, char[VORPAL_DEFAULT_STR_CHAR_COUNT]);
 		initReadOnlyProtected(client.loginApp.HWID, char[VORPAL_DEFAULT_STR_CHAR_COUNT]);
 
+		//initReadOnlyProtected(client.loginApp.Result, bool);
 		//Login
 		client.login_size = sizeof(Protected_Login);
 
