@@ -1,23 +1,6 @@
 #include <iostream>
 #include <Windows.h>
 #include "Vorpal/VorpalLibrary.h"
-inline constexpr char joaat_tolower(char c) {
-    return c >= 'A' && c <= 'Z' ? c | 1 << 5 : c;
-}
-
-inline constexpr uint32_t joaat(const std::string_view str) {
-    uint32_t hash = 0;
-    for (auto c : str)
-    {
-        hash += joaat_tolower(c);
-        hash += (hash << 10);
-        hash ^= (hash >> 6);
-    }
-    hash += (hash << 3);
-    hash ^= (hash >> 11);
-    hash += (hash << 15);
-    return hash;
-}
 
 int main() {
     //Initialize vorpal
