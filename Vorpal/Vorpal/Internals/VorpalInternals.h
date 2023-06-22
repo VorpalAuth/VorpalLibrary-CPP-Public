@@ -11,7 +11,7 @@
 #define VORPAL_DEFAULT_STR_CHAR_COUNT 64
 
 //DO NOT TOUCH
-#define VORPAL_API_VERSION 2
+#define VORPAL_API_VERSION 3
 
 #define VORPAL_MAX_PROCS 16
 #define VORPAL_PROC_MAX_ARGS 10
@@ -103,5 +103,7 @@ this->CloseProtected(ro);
 struct ProcExtraData {
 	std::function<void(uintptr_t, uintptr_t)> callback;
 	uintptr_t vorpal;
+
 	uintptr_t protected_struct; size_t protected_struct_size;
+	std::vector<ReadOnlyData*> readOnlyDatas; //Used for automatically closing/opening them before and after callback call
 };

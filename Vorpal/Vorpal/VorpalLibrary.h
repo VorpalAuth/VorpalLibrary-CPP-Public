@@ -20,35 +20,84 @@ public:
 		return this->lastStatus;
 	}
 
-	void GetApplication(std::string appId, std::function<void(uintptr_t /*Vorpal**/, uintptr_t /*Protected_Application*/)> fn) {
+	void GetApplication(std::string appId, std::function<void(Vorpal*, Protected_Application*)> fn) {
 		constexpr uint32_t procId = 0x6832ab00U;
 
 		ProcArgs theargs = { {} };
 		memcpy_s(theargs.args[0].arg_s, 25, appId.c_str(), appId.size() + 1);
 
-		this->InvokeProcAsync(procId, theargs, fn, reinterpret_cast<uintptr_t>(&this->client.app), this->client.app_size);
+
+
+		Protected_Application* app = &this->client.app;
+		size_t app_size = this->client.app_size;
+
+		std::vector<ReadOnlyData*> autoCloseFields = { //We will automatically open and close these fields then the callback gets called, freeing up the user from this arduous task
+			&app->Result,
+			&app->Name,
+			&app->Domain,
+			&app->Version,
+			&app->Login,
+			&app->Key,
+			&app->HWID,
+			&app->Maintenance,
+			&app->Developer,
+			&app->AntiDebug,
+			&app->AntiVM
+		};
+
+		this->InvokeProcAsync(procId, theargs, *static_cast<std::function<void(uintptr_t, uintptr_t)>*>(static_cast<void*>(&fn)), reinterpret_cast<uintptr_t>(app), app_size, autoCloseFields);
 	}
 
-	void Login(std::string user, std::string password, std::function<void(uintptr_t /*Vorpal**/, uintptr_t/*Protected_Login**/)> fn) {
+	void Login(std::string user, std::string password, std::function<void(Vorpal*, Protected_Login*)> fn) {
 		constexpr uint32_t procId = 0xf8050339U;
 
 		ProcArgs theargs = { {} };
 		memcpy_s(theargs.args[0].arg_s, 25, user.c_str(), user.size() + 1);
 		memcpy_s(theargs.args[1].arg_s, 25, password.c_str(), password.size() + 1);
 
-		this->InvokeProcAsync(procId, theargs, fn, reinterpret_cast<uintptr_t>(&this->client.login), this->client.login_size);
+
+
+		Protected_Login* login = &this->client.login;
+		size_t login_size = this->client.login_size;
+
+		std::vector<ReadOnlyData*> autoCloseFields = { //We will automatically open and close these fields then the callback gets called, freeing up the user from this arduous task
+			&login->HashedID,
+			&login->Username,
+			&login->Email,
+			&login->Status,
+			&login->Rank
+		};
+
+		this->InvokeProcAsync(procId, theargs, *static_cast<std::function<void(uintptr_t, uintptr_t)>*>(static_cast<void*>(&fn)), reinterpret_cast<uintptr_t>(&this->client.login), this->client.login_size, autoCloseFields);
 	}
 
-	void LoginApplication(std::string appId, std::function<void(uintptr_t /*Vorpal**/, uintptr_t  /*Protected_LoginApplication**/)> fn) {
+	void LoginApplication(std::string appId, std::function<void(Vorpal*, Protected_LoginApplication*)> fn) {
 		constexpr uint32_t procId = 0xa5b17bdU;
 
 		ProcArgs theargs = { {} };
 		memcpy_s(theargs.args[0].arg_s, 25, appId.c_str(), appId.size() + 1);
 
-		this->InvokeProcAsync(procId, theargs, fn, reinterpret_cast<uintptr_t>(&this->client.loginApp), this->client.loginApp_size);
+
+		Protected_LoginApplication* loginApp = &this->client.loginApp;
+		size_t loginApp_size = this->client.loginApp_size;
+
+		std::vector<ReadOnlyData*> autoCloseFields = { //We will automatically open and close these fields then the callback gets called, freeing up the user from this arduous task
+			&loginApp->Result,
+			&loginApp->HashedID,
+			&loginApp->Username,
+			&loginApp->Email,
+			&loginApp->Status,
+			&loginApp->Rank,
+			&loginApp->Key,
+			&loginApp->HWID,
+		};
+
+		this->InvokeProcAsync(procId, theargs, *static_cast<std::function<void(uintptr_t, uintptr_t)>*>(static_cast<void*>(&fn)), reinterpret_cast<uintptr_t>(loginApp), loginApp_size, autoCloseFields);
 	}
 
-	void Register(std::string username, std::string password, std::string email, std::function<void(uintptr_t /*Vorpal**/, uintptr_t  /*Protected_LoginApplication**/)> fn) {
+
+
+	void Register(std::string username, std::string password, std::string email, std::function<void(Vorpal*, Protected_LoginApplication*)> fn) {
 		constexpr uint32_t procId = 0x839c6e6e;
 
 		ProcArgs theargs = { {} };
@@ -56,16 +105,46 @@ public:
 		memcpy_s(theargs.args[1].arg_s, 25, password.c_str(), password.size() + 1);
 		memcpy_s(theargs.args[2].arg_s, 25, email.c_str(), email.size() + 1);
 
-		this->InvokeProcAsync(procId, theargs, fn, reinterpret_cast<uintptr_t>(&this->client.loginApp), this->client.loginApp_size);
+
+		Protected_LoginApplication* loginApp = &this->client.loginApp;
+		size_t loginApp_size = this->client.loginApp_size;
+
+		std::vector<ReadOnlyData*> autoCloseFields = { //We will automatically open and close these fields then the callback gets called, freeing up the user from this arduous task
+			&loginApp->Result,
+			&loginApp->HashedID,
+			&loginApp->Username,
+			&loginApp->Email,
+			&loginApp->Status,
+			&loginApp->Rank,
+			&loginApp->Key,
+			&loginApp->HWID,
+		};
+
+		this->InvokeProcAsync(procId, theargs, *static_cast<std::function<void(uintptr_t, uintptr_t)>*>(static_cast<void*>(&fn)), reinterpret_cast<uintptr_t>(loginApp), loginApp_size, autoCloseFields);
 	}
 
-	void RedeemLicense(std::string license, std::function<void(uintptr_t /*Vorpal**/, uintptr_t  /*Protected_LoginApplication**/)> fn) {
+	void RedeemLicense(std::string license, std::function<void(Vorpal*, Protected_LoginApplication*)> fn) {
 		constexpr uint32_t procId = 0xb3431b91;
 
 		ProcArgs theargs = { {} };
 		memcpy_s(theargs.args[0].arg_s, 25, license.c_str(), license.size() + 1);
 
-		this->InvokeProcAsync(procId, theargs, fn, reinterpret_cast<uintptr_t>(&this->client.loginApp), this->client.loginApp_size);
+		//Protected struct handling
+		Protected_LoginApplication* loginApp = &this->client.loginApp;
+		size_t loginApp_size = this->client.loginApp_size;
+
+		std::vector<ReadOnlyData*> autoCloseFields = { //We will automatically open and close these fields then the callback gets called, freeing up the user from this arduous task
+			&loginApp->Result,
+			&loginApp->HashedID,
+			&loginApp->Username,
+			&loginApp->Email,
+			&loginApp->Status,
+			&loginApp->Rank,
+			&loginApp->Key,
+			&loginApp->HWID,
+		};
+
+		this->InvokeProcAsync(procId, theargs, *static_cast<std::function<void(uintptr_t, uintptr_t)>*>(static_cast<void*>(&fn)), reinterpret_cast<uintptr_t>(loginApp), loginApp_size, autoCloseFields);
 	}
 
 	void GetChangelogs(std::string appId) {
@@ -76,24 +155,24 @@ public:
 		
 	}
 
-	__forceinline void GetVariable(std::string key, std::string appId, std::function<void(uintptr_t /*Vorpal**/, uintptr_t  /*ReadOnlyData**/)> fn) {
+	__forceinline void GetVariable(std::string key, std::string appId, std::function<void(Vorpal*, ReadOnlyData*)> fn) {
 		constexpr uint32_t procId = 0x3d7d6bc9U;
 
 		ProcArgs theargs = { {} };
 		memcpy_s(theargs.args[0].arg_s, 25, key.c_str(), key.size() + 1);
 		memcpy_s(theargs.args[1].arg_s, 25, appId.c_str(), appId.size() + 1);
 
-		this->InvokeProcAsync(procId, theargs, fn, reinterpret_cast<uintptr_t>(&this->client.currentFile));
+		this->InvokeProcAsync(procId, theargs, *static_cast<std::function<void(uintptr_t, uintptr_t)>*>(static_cast<void*>(&fn)), reinterpret_cast<uintptr_t>(&this->client.currentFile));
 	}
 
-	__forceinline void GetFile(std::string key, std::string appId, std::function<void(uintptr_t /*Vorpal**/, uintptr_t  /*ReadOnlyData**/)> fn) {
+	__forceinline void GetFile(std::string key, std::string appId, std::function<void(Vorpal*, ReadOnlyData*)> fn) {
 		constexpr uint32_t procId = 0x1be3f8afU;
 
 		ProcArgs theargs = { {} };
 		memcpy_s(theargs.args[0].arg_s, 25, key.c_str(), key.size() + 1);
 		memcpy_s(theargs.args[1].arg_s, 25, appId.c_str(), appId.size() + 1);
 
-		this->InvokeProcAsync(procId, theargs, fn, reinterpret_cast<uintptr_t>(&this->client.currentFile));
+		this->InvokeProcAsync(procId, theargs, *static_cast<std::function<void(uintptr_t, uintptr_t)>*>(static_cast<void*>(&fn)), reinterpret_cast<uintptr_t>(&this->client.currentFile));
 	}
 
 	void CloseProtected(uintptr_t p, size_t siz) {
@@ -130,7 +209,7 @@ public:
 
 	Vorpal(std::string brandId) {
 		this->initStatus = Vorpal_Register(&client, (char*)brandId.c_str(), VORPAL_API_VERSION);
-
+		//Sleep(20000); MOVER BEHIND THE REGISTER ITSELF
 		if (this->initStatus != VORPAL_STATUS::OK) {
 			return;
 		}
@@ -146,14 +225,14 @@ public:
 		initReadOnlyProtected(client.app.Name, char[VORPAL_DEFAULT_STR_CHAR_COUNT]);
 		initReadOnlyProtected(client.app.Version, char[VORPAL_DEFAULT_STR_CHAR_COUNT]);
 		initReadOnlyProtected(client.app.Login, char[VORPAL_DEFAULT_STR_CHAR_COUNT]);
-		initReadOnlyProtected(client.app.Name, char[VORPAL_DEFAULT_STR_CHAR_COUNT]);
+		initReadOnlyProtected(client.app.Key, char[VORPAL_DEFAULT_STR_CHAR_COUNT]);
 
 		initReadOnlyProtected(client.app.HWID, bool);
 		initReadOnlyProtected(client.app.Maintenance, bool);
 		initReadOnlyProtected(client.app.Developer, bool);
 		initReadOnlyProtected(client.app.AntiDebug, bool);
 		initReadOnlyProtected(client.app.AntiVM, bool);
-		//initReadOnlyProtected(client.app.Result, bool);
+		initReadOnlyProtected(client.app.Result, bool);
 
 		//LoginApplication
 		client.loginApp_size = sizeof(Protected_LoginApplication);
@@ -166,7 +245,7 @@ public:
 		initReadOnlyProtected(client.loginApp.Key, char[VORPAL_DEFAULT_STR_CHAR_COUNT]);
 		initReadOnlyProtected(client.loginApp.HWID, char[VORPAL_DEFAULT_STR_CHAR_COUNT]);
 
-		//initReadOnlyProtected(client.loginApp.Result, bool);
+		initReadOnlyProtected(client.loginApp.Result, bool);
 		//Login
 		client.login_size = sizeof(Protected_Login);
 
@@ -223,8 +302,18 @@ public:
 				if (procExtra.protected_struct != 0) { //0 means not needed and not inside a protected struct
 					this->OpenProtected(procExtra.protected_struct, procExtra.protected_struct_size);
 				}
+				
+				//Open every relevant readonlydata
+				for (ReadOnlyData* ro : procExtra.readOnlyDatas) {
+					this->OpenProtected(*ro);
+				}
 
 				procExtra.callback(procExtra.vorpal, procExtra.protected_struct);
+
+				//Close every relevant readonlydata after we are done
+				for (ReadOnlyData* ro : procExtra.readOnlyDatas) {
+					this->OpenProtected(*ro);
+				}
 
 				//Reset after we done
 				front.first->status = VORPAL_STATUS::NONE;
@@ -238,7 +327,7 @@ public:
 		}
 	}
 
-	VORPAL_STATUS InvokeProcAsync(std::uint32_t proc, ProcArgs args, std::function<void(uintptr_t, uintptr_t)> callback, uintptr_t protected_struct = 0, uintptr_t protected_struct_size = 0) {
+	VORPAL_STATUS InvokeProcAsync(std::uint32_t proc, ProcArgs args, std::function<void(uintptr_t, uintptr_t)> callback, uintptr_t protected_struct = 0, uintptr_t protected_struct_size = 0, std::vector<ReadOnlyData*> readOnlyDatas = {}) {
 		for (int i = 0; i < 16; ++i) {
 			Proc* procData = &this->client.vorpalProcs[i];
 			if (procData->status == VORPAL_STATUS::NONE) {
@@ -250,6 +339,7 @@ public:
 				extra.vorpal = reinterpret_cast<uintptr_t>(this);
 				extra.protected_struct = protected_struct;
 				extra.protected_struct_size = protected_struct_size;
+				extra.readOnlyDatas = readOnlyDatas;
 				extra.callback = callback;
 
 				callbacks.push(std::make_pair(procData, extra));

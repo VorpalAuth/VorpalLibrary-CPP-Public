@@ -5,7 +5,7 @@
 int main() {
     //Initialize vorpal
     Vorpal v("Your valor id here");
-
+    
     //Check for initialization status
     if (v.GetInitializationStatus() != VORPAL_STATUS::OK) {
         std::cout << "[-] Error when initializing vorpal: " << std::hex << (int)v.GetLastStatus() << "\n";
@@ -13,10 +13,7 @@ int main() {
 
     //Grab a file from the vorpal api, given that we are logged in
     //All vorpal APIs use callbacks and are asynchronous
-    v.GetFile("Test", "test2", [](uintptr_t vorpal_address, uintptr_t fileData_address){
-        auto vorpal = reinterpret_cast<Vorpal*>(vorpal_address);
-        auto fileData = reinterpret_cast<ReadOnlyData*>(fileData_address);
-
+    v.GetFile("Test", "test2", [](Vorpal* vorpal, ReadOnlyData* fileData){
         std::optional<std::string> file = vorpal->GetReadOnly<std::string>(fileData);
 
         //If it doesn't have a value, there's been an issue grabbing it
@@ -35,10 +32,7 @@ int main() {
 
     });
 
-    v.GetVariable("Test", "test2", [](uintptr_t vorpal_address, uintptr_t varData_address) {
-        auto vorpal = reinterpret_cast<Vorpal*>(vorpal_address);
-        auto varData = reinterpret_cast<ReadOnlyData*>(varData_address);
-
+    v.GetVariable("Test", "test2", [](Vorpal* vorpal, ReadOnlyData* varData) {
         std::optional<std::string> var = vorpal->GetReadOnly<std::string>(varData);
 
         if (var.has_value()) {
@@ -55,13 +49,7 @@ int main() {
 
 
     //Functions that use protected fields, require manual handling, don't worry we made it easy for you
-    v.GetApplication("appId", [](uintptr_t vorpal_address, uintptr_t app_address) {
-        auto vorpal = reinterpret_cast<Vorpal*>(vorpal_address);
-        Protected_Application* app = reinterpret_cast<Protected_Application*>(app_address);
-
-        //Before using protected fields, we have to open them.
-        vorpal->OpenProtected(app->Domain);
-
+    v.GetApplication("appId", [](Vorpal* vorpal, Protected_Application* app) {
         auto name = vorpal->GetReadOnly<std::string>(&app->Domain);
         if (name.has_value()) {
             std::cout << "Domain: " << name.value() << "\n";
@@ -76,17 +64,9 @@ int main() {
             }
         }
 
-        //Don't forget to close
-        vorpal->CloseProtected(app->Domain);
     });
 
-    v.Login("username", "password", [](uintptr_t vorpal_address, uintptr_t login_address) {
-        auto vorpal = reinterpret_cast<Vorpal*>(vorpal_address);
-        auto login = reinterpret_cast<Protected_Login*>(login_address);
-
-        //Before using protected fields, we have to open them.
-        vorpal->OpenProtected(login->Username);
-
+    v.Login("username", "password", [](Vorpal* vorpal, Protected_Login* login) {
         auto user = vorpal->GetReadOnly<std::string>(&login->Username);
         if (user.has_value()) {
             std::cout << "Username: " << user.value() << "\n";
@@ -99,8 +79,7 @@ int main() {
             }
         }
 
-        //Don't forget to close
-        vorpal->CloseProtected(login->Username);
+
 
         //License Keys don't need open/close as they are not protected
         if (login->KeyAmount < VORPAL_MAX_LICENSEKEYS) {
@@ -109,17 +88,11 @@ int main() {
             }
         }
         else {
-            std::cout << "[-] This error shouldn't happen ever.\n";
+            std::cout << "[-] This error shouldn't happen ever.\n" << login->KeyAmount;
         }
-    });
+        });
 
-    v.LoginApplication("appId", [](uintptr_t vorpal_address, uintptr_t loginApp_address) {
-        auto vorpal = reinterpret_cast<Vorpal*>(vorpal_address);
-        auto loginApp = reinterpret_cast<Protected_LoginApplication*>(loginApp_address);
-
-        //Before using protected fields, we have to open them.
-        vorpal->OpenProtected(loginApp->Username);
-
+    v.LoginApplication("appId", [](Vorpal* vorpal, Protected_LoginApplication* loginApp) {
         auto user = vorpal->GetReadOnly<std::string>(&loginApp->Username);
         if (user.has_value()) {
             std::cout << "Username: " << user.value() << "\n";
@@ -131,19 +104,11 @@ int main() {
                 std::cout << "[?] Error identified as NOT_ENOUGH_MEMORY, we have allocated more memory for you, please try again...\n";
             }
         }
-
-        //Don't forget to close
-        vorpal->CloseProtected(loginApp->Username);
     });
 
-    v.Register("Peter2", "hunter3", "peter@example.com", [](uintptr_t vorpal_address, uintptr_t loginApp_address) {
-        auto vorpal = reinterpret_cast<Vorpal*>(vorpal_address);
-        auto loginApp = reinterpret_cast<Protected_LoginApplication*>(loginApp_address);
-
-        //Before using protected fields, we have to open them.
-        vorpal->OpenProtected(loginApp->Result);
-
+    v.Register("Peter2", "hunter3", "peter@example.com", [](Vorpal* vorpal, Protected_LoginApplication* loginApp) {
         auto result = vorpal->GetReadOnly<bool>(&loginApp->Result);
+
         if (result.has_value()) {
             std::cout << "Register Status: " << result.value()  << "\n";
         }
@@ -155,17 +120,9 @@ int main() {
             }
         }
 
-        //Don't forget to close
-        vorpal->CloseProtected(loginApp->Result);
     });
 
-    v.RedeemLicense("4444-4444-4444", [](uintptr_t vorpal_address, uintptr_t loginApp_address) {
-        auto vorpal = reinterpret_cast<Vorpal*>(vorpal_address);
-        auto loginApp = reinterpret_cast<Protected_LoginApplication*>(loginApp_address);
-
-        //Before using protected fields, we have to open them.
-        vorpal->OpenProtected(loginApp->Result);
-
+    v.RedeemLicense("4444-4444-4444", [](Vorpal* vorpal, Protected_LoginApplication* loginApp) {
         auto result = vorpal->GetReadOnly<bool>(&loginApp->Result);
         if (result.has_value()) {
             std::cout << "License Redeem Status: " << result.value() << "\n";
@@ -177,9 +134,6 @@ int main() {
                 std::cout << "[?] Error identified as NOT_ENOUGH_MEMORY, we have allocated more memory for you, please try again...\n";
             }
         }
-
-        //Don't forget to close
-        vorpal->CloseProtected(loginApp->Result);
     });
 
     while (true) {

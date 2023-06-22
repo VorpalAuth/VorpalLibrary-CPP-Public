@@ -57,10 +57,7 @@ VORPAL_EXTERN struct Protected_Login {
 };
 
 
-//New
 VORPAL_EXTERN struct VorpalClient { //Vorpalclient represents the data that the client has, this data is linked to their Vorpal (classPtr) instance
-	uint64_t inst;
-
 	Protected_Application app; size_t app_size;
 	Protected_LoginApplication loginApp; size_t loginApp_size;
 	Protected_Login login; size_t login_size;
