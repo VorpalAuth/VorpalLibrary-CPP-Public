@@ -162,7 +162,7 @@ public:
 		memcpy_s(theargs.args[0].arg_s, 25, key.c_str(), key.size() + 1);
 		memcpy_s(theargs.args[1].arg_s, 25, appId.c_str(), appId.size() + 1);
 
-		this->InvokeProcAsync(procId, theargs, *static_cast<std::function<void(uintptr_t, uintptr_t)>*>(static_cast<void*>(&fn)), reinterpret_cast<uintptr_t>(&this->client.currentFile));
+		this->InvokeProcAsync(procId, theargs, *static_cast<std::function<void(uintptr_t, uintptr_t)>*>(static_cast<void*>(&fn)), reinterpret_cast<uintptr_t>(&this->client.currentVar));
 	}
 
 	__forceinline void GetFile(std::string key, std::string appId, std::function<void(Vorpal*, ReadOnlyData*)> fn) {
@@ -183,14 +183,6 @@ public:
 		this->InvokeProc(0x8722e8e0U, theargs);
 	}
 
-	void CloseProtected(ReadOnlyData& d) {
-		ProcArgs theargs = { {} };
-		theargs.args[0].arg_ull = d.data;
-		theargs.args[1].arg_ull = d.size;
-
-		this->InvokeProc(0x8722e8e0U, theargs);
-	}
-
 	void OpenProtected(uintptr_t p, size_t siz) {
 		ProcArgs theargs = { {} };
 		theargs.args[0].arg_ull = p;
@@ -199,12 +191,18 @@ public:
 		this->InvokeProc(0x21051ccaU, theargs);
 	}
 
-	void OpenProtected(ReadOnlyData& d) {
+	void OpenProtected(ReadOnlyData* d) {
 		ProcArgs theargs = { {} };
-		theargs.args[0].arg_ull = d.data;
-		theargs.args[1].arg_ull = d.size;
+		theargs.args[0].arg_ull = reinterpret_cast<uintptr_t>(d);
 
-		this->InvokeProc(0x21051ccaU, theargs);
+		this->InvokeProc(0x870689b4U, theargs);
+	}
+
+	void CloseProtected(ReadOnlyData* d) {
+		ProcArgs theargs = { {} };
+		theargs.args[0].arg_ull = reinterpret_cast<uintptr_t>(d);
+
+		this->InvokeProc(0xe6457fdU, theargs);
 	}
 
 	Vorpal(std::string brandId) {
@@ -305,14 +303,14 @@ public:
 				
 				//Open every relevant readonlydata
 				for (ReadOnlyData* ro : procExtra.readOnlyDatas) {
-					this->OpenProtected(*ro);
+					this->OpenProtected(ro);
 				}
 
 				procExtra.callback(procExtra.vorpal, procExtra.protected_struct);
 
 				//Close every relevant readonlydata after we are done
 				for (ReadOnlyData* ro : procExtra.readOnlyDatas) {
-					this->OpenProtected(*ro);
+					this->CloseProtected(ro);
 				}
 
 				//Reset after we done

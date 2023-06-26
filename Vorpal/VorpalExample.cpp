@@ -2,6 +2,7 @@
 #include <Windows.h>
 #include "Vorpal/VorpalLibrary.h"
 
+
 int main() {
     //Initialize vorpal
     Vorpal v("Your valor id here");
@@ -46,7 +47,7 @@ int main() {
             }
         }
     });
-
+    //TODO PORT ALL READONLYDATAS TO READONLY<TYPE> also don't forget this is APIV4'
 
     //Functions that use protected fields, require manual handling, don't worry we made it easy for you
     v.GetApplication("appId", [](Vorpal* vorpal, Protected_Application* app) {
@@ -66,6 +67,8 @@ int main() {
 
     });
 
+
+
     v.Login("username", "password", [](Vorpal* vorpal, Protected_Login* login) {
         auto user = vorpal->GetReadOnly<std::string>(&login->Username);
         if (user.has_value()) {
@@ -79,8 +82,6 @@ int main() {
             }
         }
 
-
-
         //License Keys don't need open/close as they are not protected
         if (login->KeyAmount < VORPAL_MAX_LICENSEKEYS) {
             for (int i = 0; i < login->KeyAmount; ++i) {
@@ -91,6 +92,8 @@ int main() {
             std::cout << "[-] This error shouldn't happen ever.\n" << login->KeyAmount;
         }
         });
+
+
 
     v.LoginApplication("appId", [](Vorpal* vorpal, Protected_LoginApplication* loginApp) {
         auto user = vorpal->GetReadOnly<std::string>(&loginApp->Username);
@@ -105,6 +108,8 @@ int main() {
             }
         }
     });
+
+
 
     v.Register("Peter2", "hunter3", "peter@example.com", [](Vorpal* vorpal, Protected_LoginApplication* loginApp) {
         auto result = vorpal->GetReadOnly<bool>(&loginApp->Result);
@@ -122,6 +127,8 @@ int main() {
 
     });
 
+
+
     v.RedeemLicense("4444-4444-4444", [](Vorpal* vorpal, Protected_LoginApplication* loginApp) {
         auto result = vorpal->GetReadOnly<bool>(&loginApp->Result);
         if (result.has_value()) {
@@ -135,6 +142,10 @@ int main() {
             }
         }
     });
+
+
+
+
 
     while (true) {
         v.Tick(); //Make sure to tick this somewhere

@@ -11,7 +11,7 @@
 #define VORPAL_DEFAULT_STR_CHAR_COUNT 64
 
 //DO NOT TOUCH
-#define VORPAL_API_VERSION 3
+#define VORPAL_API_VERSION 4
 
 #define VORPAL_MAX_PROCS 16
 #define VORPAL_PROC_MAX_ARGS 10
@@ -86,6 +86,7 @@ VORPAL_EXTERN struct ReadOnlyData {
 	size_t wantedSize;
 };
 
+
 ///Vorpal Library imports
 VORPAL_API VORPAL_STATUS Vorpal_Register(VorpalClient* info, char* valorid, int apiVersion);
 VORPAL_API void Vorpal_Unregister(VorpalClient* info);
@@ -97,9 +98,9 @@ ro.size = sizeof(type);
 
 #define initReadOnlyProtected(ro, type)ro.data = (uintptr_t) new type;\
 ro.size = sizeof(type);\
-this->CloseProtected(ro);
+this->CloseProtected(&ro);
 
-//Not portable/C++ only
+//C++ only
 struct ProcExtraData {
 	std::function<void(uintptr_t, uintptr_t)> callback;
 	uintptr_t vorpal;
