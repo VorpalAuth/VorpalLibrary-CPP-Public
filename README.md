@@ -11,6 +11,7 @@ Here are a few examples to get you up to speed, should you need it, if you want 
 <br />
 
 - Initialize the library and set up the Tick()
+
 ```cpp
     #include "..\..\include\VorpalLibrary.h"
     
@@ -29,6 +30,7 @@ void aLoop(){
 ```
 <br />
 <br />
+
 - Log a user in
 
 ```cpp
@@ -58,6 +60,7 @@ void aLoop(){
 ```
 
 <br />
+
 - Fetch a variable
 
 ```cpp
