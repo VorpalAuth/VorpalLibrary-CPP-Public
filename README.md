@@ -1,4 +1,5 @@
 
+
 # VorpalLibraryEx-CPP
 C++ wrapper based on VorpalLibraryEx-Interface to be used with the Vorpal Extended Library. This wrapper follows an asynchronous model which is ideal for all sorts of applications including videogames.
 
@@ -29,6 +30,7 @@ void aLoop(){
 <br />
 <br />
 - Log a user in
+
 ```cpp
     v.Login("Peter2", "hunter3", [](Vorpal* vorpal, Protected_Login* login) {
         auto user = vorpal->GetReadOnly<std::string>(&login->Username);
@@ -57,6 +59,7 @@ void aLoop(){
 
 <br />
 - Fetch a variable
+
 ```cpp
     //Fetch a variable from the vorpal api, given that we are logged in
     v.GetVariable("Test", "test2", [](Vorpal* vorpal, ReadOnlyData* varData) {
