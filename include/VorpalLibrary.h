@@ -1,4 +1,6 @@
-#pragma once
+#ifndef VORPAL_LIBRARY_H_
+#define VORPAL_LIBRARY_H_
+
 #include "Internals/VorpalStructs.h"
 #include <queue>
 #include <chrono>
@@ -389,3 +391,4 @@ public:
 };
 
 
+#endif //VORPAL_LIBRARY_H_

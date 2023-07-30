@@ -147,9 +147,9 @@
     <ClCompile Include="VorpalExample.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Vorpal\Internals\VorpalInternals.h" />
-    <ClInclude Include="Vorpal\Internals\VorpalStructs.h" />
-    <ClInclude Include="Vorpal\VorpalLibrary.h" />
+    <ClInclude Include="..\..\include\Internals\VorpalInternals.h" />
+    <ClInclude Include="..\..\include\Internals\VorpalStructs.h" />
+    <ClInclude Include="..\..\include\VorpalLibrary.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

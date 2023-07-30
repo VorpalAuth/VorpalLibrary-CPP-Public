@@ -1,4 +1,6 @@
-#pragma once
+#ifndef VORPAL_INTERNALS_H_
+#define VORPAL_INTERNALS_H_
+
 #include <stdint.h>
 #include <string>
 #include <optional>
@@ -108,3 +110,5 @@ struct ProcExtraData {
 	uintptr_t protected_struct; size_t protected_struct_size;
 	std::vector<ReadOnlyData*> readOnlyDatas; //Used for automatically closing/opening them before and after callback call
 };
+
+#endif //VORPAL_INTERNALS_H

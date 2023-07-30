@@ -1,4 +1,6 @@
-#pragma once
+#ifndef VORPAL_STRUCTS_H_
+#define VORPAL_STRUCTS_H_
+
 #include "VorpalInternals.h"
 
 //Structs used by the Vorpal Client
@@ -68,3 +70,5 @@ VORPAL_EXTERN struct VorpalClient { //Vorpalclient represents the data that the 
 	Proc vorpalProcs[VORPAL_MAX_PROCS] = { {{}} };
 	Proc vorpalProcs2[VORPAL_MAX_PROCS] = { {{}} };
 };
+
+#endif //VORPAL_STRUCTS_H

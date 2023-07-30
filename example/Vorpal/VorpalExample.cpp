@@ -1,6 +1,6 @@
 #include <iostream>
 #include <Windows.h>
-#include "Vorpal/VorpalLibrary.h"
+#include "..\..\include\VorpalLibrary.h"
 
 
 int main() {
