@@ -1,11 +1,14 @@
+
 # VorpalLibraryEx-CPP
-C++ wrapper based on VorpalLibraryEx-Interface to be used with the Vorpal Extended Library.
+C++ wrapper based on VorpalLibraryEx-Interface to be used with the Vorpal Extended Library. This wrapper follows an asynchronous model which is ideal for all sorts of applications including videogames.
 
 
 ## Examples
 Here are a few examples to get you up to speed, should you need it, if you want a project implementing the whole API check out the "example" folder.
 
-- Initialize the library
+<br />
+
+- Initialize the library and set up the Tick()
 ```cpp
     #include "..\..\include\VorpalLibrary.h"
     
@@ -16,6 +19,11 @@ Here are a few examples to get you up to speed, should you need it, if you want 
     if (v.GetInitializationStatus() != VORPAL_STATUS::OK) {
         std::cout << "[-] Error when initializing vorpal: " << std::hex << (int)v.GetLastStatus() << "\n";
     }
+
+//Make sure you Tick the vorpal library somewhere that's looped.
+void aLoop(){
+		v.Tick();
+}
 ```
 
 - Log a user in
@@ -66,4 +74,3 @@ Here are a few examples to get you up to speed, should you need it, if you want 
 
 ## License
 TODO: Pick a license, all rights reserved for now.
-
