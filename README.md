@@ -20,16 +20,16 @@ Here are a few examples to get you up to speed, should you need it, if you want 
     Vorpal v("Your valor id here");
     
     int main(){
-	    //Check for initialization status   
-	    if (v.GetInitializationStatus() != VORPAL_STATUS::OK) {
-	        std::cout << "[-] Error initializing vorpal: " << std::hex << (int)v.GetLastStatus() << "\n";
-	    }
+    	//Check for initialization status   
+    	if (v.GetInitializationStatus() != VORPAL_STATUS::OK) {
+    		std::cout << "[-] Error initializing vorpal: " << std::hex << (int)v.GetLastStatus() << "\n";
+	}
     }
 
-	//Make sure you Tick the vorpal library somewhere that's looped.
-	void aLoop(){
-		v.Tick();
-	}
+    //Make sure you Tick the vorpal library somewhere that's looped.
+    void aLoop(){
+    	v.Tick();
+    }
 ```
 <br />
 <br />
