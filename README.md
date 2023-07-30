@@ -5,7 +5,7 @@ C++ wrapper based on VorpalLibraryEx-Interface to be used with the Vorpal Extend
 ## Examples
 Here are a few examples to get you up to speed, should you need it, if you want a project implementing the whole API check out the "example" folder.
 
-Initialize the library
+- Initialize the library
 ```cpp
     #include "..\..\include\VorpalLibrary.h"
     
@@ -18,7 +18,7 @@ Initialize the library
     }
 ```
 
-Log a user in
+- Log a user in
 ```cpp
     v.Login("Peter2", "hunter3", [](Vorpal* vorpal, Protected_Login* login) {
         auto user = vorpal->GetReadOnly<std::string>(&login->Username);
@@ -45,7 +45,7 @@ Log a user in
         });
 ```
 
-Fetch a variable
+- Fetch a variable
 ```cpp
     //Fetch a variable from the vorpal api, given that we are logged in
     v.GetVariable("Test", "test2", [](Vorpal* vorpal, ReadOnlyData* varData) {
