@@ -72,7 +72,7 @@ void aLoop(){
             std::cout << "[-] There was an error when fetching a variable\n";
 
             if (vorpal->GetLastStatus() == VORPAL_STATUS::NOT_ENOUGH_MEMORY) { 
-                std::cout << "[?] Error identified as NOT_ENOUGH_MEMORY, we have allocated more memory for you, please try again...\n";
+                std::cout << "[?] We have allocated more memory for you, please try again...\n";
             }
         }
     });
