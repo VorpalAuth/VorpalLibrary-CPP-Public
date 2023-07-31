@@ -85,5 +85,6 @@ Here are a few examples to get you up to speed, should you need it, if you want 
 ```
 <br />
 <br />
+
 ## License
-TODO: Pick a license, all rights reserved for now.
+This repository is licensed under the MIT License, more information click [here](https://github.com/VorpalAuth/VorpalLibraryEx-CPP/blob/main/LICENSE).
