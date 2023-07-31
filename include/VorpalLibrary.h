@@ -1,3 +1,10 @@
+/**
+* Copyright (C) 2023 Vorpal. All rights reserved.
+*
+* Licensed under the MIT License. You may obtain a copy
+* in the file "LICENSE" found at the root of this repository.
+*/
+
 #ifndef VORPAL_LIBRARY_H_
 #define VORPAL_LIBRARY_H_
 
@@ -13,7 +20,6 @@ private:
 	VORPAL_STATUS lastStatus;
 
 public:
-
 	VORPAL_STATUS GetInitializationStatus() {
 		return this->initStatus;
 	}
@@ -154,7 +160,6 @@ public:
 		memcpy_s(theargs.args[0].arg_s, 25, appId.c_str(), appId.size() + 1);
 
 		//Vorpal_InvokeProc(this->client.inst, 0x5ff79718U, &theargs);
-		
 	}
 
 	__forceinline void GetVariable(std::string key, std::string appId, std::function<void(Vorpal*, ReadOnlyData*)> fn) {
@@ -261,7 +266,6 @@ public:
 
 	template <typename T>
 	__forceinline std::optional<T> GetReadOnly(ReadOnlyData* ro) {
-
 		this->lastStatus = ro->status;
 
 		if (ro->status != VORPAL_STATUS::OK) {
@@ -293,7 +297,6 @@ public:
 
 	void Tick() {
 		if (!this->callbacks.empty()) {
-			
 			auto front = this->callbacks.front();
 			auto procData = front.first;
 			auto procExtra = front.second;
@@ -387,7 +390,6 @@ public:
 		//Should never reach here...
 		return VORPAL_STATUS::NONE;
 	}
-
 };
 
 

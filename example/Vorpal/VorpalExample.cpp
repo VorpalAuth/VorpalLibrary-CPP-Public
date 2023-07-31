@@ -1,3 +1,10 @@
+/**
+* Copyright (C) 2023 Vorpal. All rights reserved.
+*
+* Licensed under the MIT License. You may obtain a copy
+* in the file "LICENSE" found at the root of this repository.
+*/
+
 #include <iostream>
 #include <Windows.h>
 #include "..\..\include\VorpalLibrary.h"
@@ -27,7 +34,6 @@ int main() {
                 std::cout << "[?] Error identified as NOT_ENOUGH_MEMORY, we have allocated more memory for you, please try again...\n";
             }
         }
-
         });
 
     //Log our user in
@@ -102,7 +108,6 @@ int main() {
                 std::cout << "[?] Error identified as NOT_ENOUGH_MEMORY, we have allocated more memory for you, please try again...\n";
             }
         }
-
     });
 
     //Fetch a variable from the vorpal api, given that we are logged in
@@ -136,7 +141,6 @@ int main() {
                 std::cout << "[?] Error identified as NOT_ENOUGH_MEMORY, we have allocated more memory for you, please try again...\n";
             }
         }
-
     });
 
     while (true) {

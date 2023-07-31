@@ -1,3 +1,10 @@
+/**
+* Copyright (C) 2023 Vorpal. All rights reserved.
+*
+* Licensed under the MIT License. You may obtain a copy
+* in the file "LICENSE" found at the root of this repository.
+*/
+
 #ifndef VORPAL_STRUCTS_H_
 #define VORPAL_STRUCTS_H_
 
